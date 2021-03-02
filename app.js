@@ -35,15 +35,19 @@ app.post("/admin/user_info", (req, res) => {
   var name = req.body.name;
   var no = req.body.no;
   var address = req.body.address;
-  // var uid = req.session.token.uid;
-  var uid = "0000";
-  var params = { uid: uid, name: name, no: no, address: address };
+  var uid = req.session.token.uid;
+  // var uid = "0000";
 
   firebaseAdmin
     .collection("user_info")
     .doc(uid)
-    .set(params)
-    .then(() => res.send({ success: true, data: params }))
+    .set({ uid: uid, name: name, no: no, address: address })
+    .then(() =>
+      res.send({
+        success: true,
+        data: { uid: uid, name: name, no: no, address: address }
+      })
+    )
     .catch(() => {
       res.send({ success: false });
     });
@@ -52,11 +56,12 @@ app.post("/admin/user_info", (req, res) => {
 // =========GET reports REQUESTS===========
 app.get("/admin/reports", function(req, res) {
   // TODO: req.client_id;
-  let uid = req.session.token.uid;
+  //"g8MIHBUhPyN53qgLWj2PVvIsw5r2"
+  // let uid = req.session.token.uid;
   let results = [];
   firebaseAdmin
     .collection("user")
-    .where("clinic_id", "==", "g8MIHBUhPyN53qgLWj2PVvIsw5r2")
+    .where("uid", "==", "AgbJ8dU3zPeqP4kE0NmKPi1et6i1")
     .get()
     .then((snapshot) => {
       snapshot.docs.map((doc) => results.push(doc.data()));
@@ -76,19 +81,28 @@ app.post("/admin/new_report", function(req, res) {
   var isFollowUp = req.body.isFollowUp;
   var uid = req.session.token.uid;
 
-  var params = {
-    uid: uid,
-    patient: patient,
-    date: date,
-    diagonsis: diagonsis,
-    isFollowUp: isFollowUp
-  };
-
   firebaseAdmin
     .collection("user")
-    .doc(uid)
-    .set(params)
-    .then(() => res.send({ success: true, data: params }))
+    .doc()
+    .set({
+      uid: uid,
+      patient: patient,
+      date: date,
+      diagonsis: diagonsis,
+      isFollowUp: isFollowUp
+    })
+    .then(() =>
+      res.send({
+        success: true,
+        data: {
+          uid: uid,
+          patient: patient,
+          date: date,
+          diagonsis: diagonsis,
+          isFollowUp: isFollowUp
+        }
+      })
+    )
     .catch(() => {
       res.send({ success: false, data: "fail to POST data" });
     });
