@@ -71,8 +71,10 @@ app.post("/admin/reports", function(req, res) {
 // =========POST report REQUESTS===========
 app.post("/admin/new_report", function(req, res) {
   var patient = req.body.patient;
+  var doctor = req.body.doctor;
   var date = req.body.date;
   var diagonsis = req.body.diagonsis;
+  var fee = req.body.fee;
   var isFollowUp = req.body.isFollowUp;
   var uid = req.body.uid;
 
@@ -82,8 +84,10 @@ app.post("/admin/new_report", function(req, res) {
     .set({
       uid: uid,
       patient: patient,
+      doctor: doctor,
       date: date,
       diagonsis: diagonsis,
+      fee: fee,
       isFollowUp: isFollowUp
     })
     .then(() =>
@@ -92,8 +96,10 @@ app.post("/admin/new_report", function(req, res) {
         data: {
           uid: uid,
           patient: patient,
+          doctor: doctor,
           date: date,
           diagonsis: diagonsis,
+          fee: fee,
           isFollowUp: isFollowUp
         }
       })
@@ -170,27 +176,11 @@ app.get("/", (req, res) => {
 });
 
 // error handlers
-if (app.get("env") === "development") {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render("error", {
-      message: err.message,
-      error: err
-    });
-  });
-}
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render("error", {
     message: err.message,
     error: err
-  });
-});
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render("error", {
-    message: err.message,
-    error: {}
   });
 });
 
