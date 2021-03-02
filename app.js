@@ -35,7 +35,7 @@ app.post("/admin/user_info", (req, res) => {
   var name = req.body.name;
   var no = req.body.no;
   var address = req.body.address;
-  var uid = req.session.token.uid;
+  var uid = req.session.uid;
   // var uid = "0000";
 
   firebaseAdmin
@@ -79,7 +79,7 @@ app.post("/admin/new_report", function(req, res) {
   var date = req.body.date;
   var diagonsis = req.body.diagonsis;
   var isFollowUp = req.body.isFollowUp;
-  var uid = req.session.token.uid;
+  var uid = req.session.uid;
 
   firebaseAdmin
     .collection("user")
