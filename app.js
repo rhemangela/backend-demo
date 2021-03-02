@@ -31,12 +31,10 @@ app.use(
 
 // =========ADMIN REQUESTS===========
 app.post("/admin/user_info", (req, res) => {
-  // TODO: req.client_id;
   var name = req.body.name;
   var no = req.body.no;
   var address = req.body.address;
-  var uid = req.session.uid;
-  // var uid = "0000";
+  var uid = req.body.uid;
 
   firebaseAdmin
     .collection("user_info")
@@ -54,14 +52,12 @@ app.post("/admin/user_info", (req, res) => {
 });
 
 // =========GET reports REQUESTS===========
-app.get("/admin/reports", function(req, res) {
-  // TODO: req.client_id;
-  //"g8MIHBUhPyN53qgLWj2PVvIsw5r2"
-  // let uid = req.session.token.uid;
+app.post("/admin/reports", function(req, res) {
+  let uid = req.body.uid;
   let results = [];
   firebaseAdmin
     .collection("user")
-    .where("uid", "==", "AgbJ8dU3zPeqP4kE0NmKPi1et6i1")
+    .where("uid", "==", uid)
     .get()
     .then((snapshot) => {
       snapshot.docs.map((doc) => results.push(doc.data()));
@@ -74,12 +70,11 @@ app.get("/admin/reports", function(req, res) {
 
 // =========POST report REQUESTS===========
 app.post("/admin/new_report", function(req, res) {
-  // TODO: req.client_id;
   var patient = req.body.patient;
   var date = req.body.date;
   var diagonsis = req.body.diagonsis;
   var isFollowUp = req.body.isFollowUp;
-  var uid = req.session.uid;
+  var uid = req.body.uid;
 
   firebaseAdmin
     .collection("user")
